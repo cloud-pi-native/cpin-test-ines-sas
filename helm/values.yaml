@@ -16,10 +16,12 @@ env:
   SENDER_S3_ENDPOINT: https://s3.sender.example.com
   SENDER_S3_REGION: us-east-1
   SENDER_S3_BUCKET: emetteur
+  SENDER_S3_PREFIX: ""
   SENDER_S3_FORCE_PATH_STYLE: "true"
   RECEIVER_S3_ENDPOINT: https://s3.receiver.example.com
   RECEIVER_S3_REGION: us-east-1
   RECEIVER_S3_BUCKET: recepteur
+  RECEIVER_S3_PREFIX: ""
   RECEIVER_S3_FORCE_PATH_STYLE: "true"
   INES_BASE_URL: https://ines.exemple.com
   INES_ACCOUNT_NAME: CPIN_INES_DEMO_EMETTEUR

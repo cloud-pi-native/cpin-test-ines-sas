@@ -24,9 +24,11 @@ export interface FileContent {
 export class Storage {
   private readonly client: S3Client;
   private readonly bucket: string;
+  private readonly prefix: string;
 
   constructor(conf: StorageConfig) {
     this.bucket = conf.bucket;
+    this.prefix = conf.prefix;
     this.client = new S3Client({
       endpoint: conf.endpoint,
       region: conf.region,
@@ -40,17 +42,25 @@ export class Storage {
     });
   }
 
+  // Keys handled by the rest of the app are relative to the root directory. A key that already
+  // carries it (e.g. a full path sent by INES) is kept as is.
+  private objectKey(key: string): string {
+    const relative = key.replace(/^\/+/, '');
+    return relative.startsWith(this.prefix) ? relative : this.prefix + relative;
+  }
+
   async list(): Promise<StoredFile[]> {
     const files: StoredFile[] = [];
     let token: string | undefined;
     do {
       const page = await this.client.send(
-        new ListObjectsV2Command({ Bucket: this.bucket, ContinuationToken: token }),
+        new ListObjectsV2Command({ Bucket: this.bucket, Prefix: this.prefix || undefined, ContinuationToken: token }),
       );
       for (const object of page.Contents ?? []) {
-        if (!object.Key) continue;
+        // Skip directory markers such as "appA/".
+        if (!object.Key || object.Key.endsWith('/')) continue;
         files.push({
-          key: object.Key,
+          key: object.Key.slice(this.prefix.length),
           size: object.Size ?? 0,
           lastModified: object.LastModified?.toISOString() ?? null,
         });
@@ -62,13 +72,13 @@ export class Storage {
 
   async put(key: string, content: Buffer, contentType: string): Promise<void> {
     await this.client.send(
-      new PutObjectCommand({ Bucket: this.bucket, Key: key, Body: content, ContentType: contentType }),
+      new PutObjectCommand({ Bucket: this.bucket, Key: this.objectKey(key), Body: content, ContentType: contentType }),
     );
   }
 
   async exists(key: string): Promise<boolean> {
     try {
-      await this.client.send(new HeadObjectCommand({ Bucket: this.bucket, Key: key }));
+      await this.client.send(new HeadObjectCommand({ Bucket: this.bucket, Key: this.objectKey(key) }));
       return true;
     } catch (err) {
       if (err instanceof S3ServiceException && err.$metadata.httpStatusCode === 404) return false;
@@ -77,7 +87,7 @@ export class Storage {
   }
 
   async read(key: string): Promise<FileContent> {
-    const response = await this.client.send(new GetObjectCommand({ Bucket: this.bucket, Key: key }));
+    const response = await this.client.send(new GetObjectCommand({ Bucket: this.bucket, Key: this.objectKey(key) }));
     return {
       stream: response.Body as Readable,
       contentType: response.ContentType,

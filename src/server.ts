@@ -109,7 +109,10 @@ app.post('/api/dispatches', async (_req, res) => {
     files.map((file) => file.key),
     response,
   );
-  logger.info({ files: files.length, ok: response.ok, inesStatus: response.status }, 'Pull requested from INES');
+  logger.info(
+    { files: files.map((file) => file.key), ok: response.ok, inesStatus: response.status },
+    'Pull requested from INES',
+  );
   res.status(response.ok ? 202 : 502).json(dispatches);
 });
 

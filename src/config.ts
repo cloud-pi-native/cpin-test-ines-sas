@@ -2,6 +2,8 @@ export interface StorageConfig {
   endpoint: string | undefined;
   region: string;
   bucket: string;
+  // Root directory inside the bucket, normalised to "dir/" (empty string = bucket root).
+  prefix: string;
   forcePathStyle: boolean;
   accessKeyId: string;
   secretAccessKey: string;
@@ -13,11 +15,17 @@ function required(name: string): string {
   return value;
 }
 
+function normalizePrefix(value: string | undefined): string {
+  const trimmed = (value ?? '').replace(/^\/+|\/+$/g, '');
+  return trimmed ? `${trimmed}/` : '';
+}
+
 function storageConfig(prefix: 'SENDER' | 'RECEIVER'): StorageConfig {
   return {
     endpoint: process.env[`${prefix}_S3_ENDPOINT`] || undefined,
     region: process.env[`${prefix}_S3_REGION`] || 'garage',
     bucket: required(`${prefix}_S3_BUCKET`),
+    prefix: normalizePrefix(process.env[`${prefix}_S3_PREFIX`]),
     forcePathStyle: process.env[`${prefix}_S3_FORCE_PATH_STYLE`] !== 'false',
     accessKeyId: required(`${prefix}_S3_ACCESS_KEY`),
     secretAccessKey: required(`${prefix}_S3_SECRET_KEY`),
