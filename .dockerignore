@@ -1,0 +1,9 @@
+node_modules
+dist
+.env
+.git
+helm
+garage
+scripts
+docs
+*.md

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Connexion — cpin-ines-s3</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="login">
+    <h1>cpin-ines-s3</h1>
+    <form method="post" action="/login">
+      <label for="password">Mot de passe</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required autofocus>
+      <button type="submit">Se connecter</button>
+      <p id="error" class="error" hidden>Mot de passe incorrect.</p>
+    </form>
+  </main>
+  <script>
+    if (new URLSearchParams(location.search).has('error')) {
+      document.getElementById('error').hidden = false;
+    }
+  </script>
+</body>
+</html>

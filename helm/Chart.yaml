@@ -1,0 +1,6 @@
+apiVersion: v2
+name: cpin-ines-s3
+description: POC transferring files between two S3 storages through INES
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

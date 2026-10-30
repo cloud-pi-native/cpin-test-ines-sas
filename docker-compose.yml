@@ -1,0 +1,32 @@
+# Local environment: Garage (S3 compatible) and, optionally, the containerised app.
+#   docker compose up -d                  → Garage only (run the app with npm run dev)
+#   docker compose --profile app up -d    → Garage + app
+services:
+  garage:
+    image: dxflrs/garage:v2.2.0
+    ports:
+      - "3900:3900"
+    volumes:
+      - ./garage/garage.toml:/etc/garage.toml:ro
+      - garage-meta:/var/lib/garage/meta
+      - garage-data:/var/lib/garage/data
+
+  app:
+    profiles: ["app"]
+    build: .
+    env_file: .env
+    # Same constraints as on OpenShift: read-only image, ephemeral /tmp.
+    read_only: true
+    tmpfs:
+      - /tmp
+    environment:
+      SENDER_S3_ENDPOINT: http://garage:3900
+      RECEIVER_S3_ENDPOINT: http://garage:3900
+    ports:
+      - "3000:3000"
+    depends_on:
+      - garage
+
+volumes:
+  garage-meta:
+  garage-data:

@@ -1,0 +1,74 @@
+:root {
+  --background: #f6f7f9;
+  --surface: #ffffff;
+  --text: #1d2330;
+  --muted: #6b7280;
+  --border: #dde1e7;
+  --accent: #2459c9;
+  --success: #1f7a3d;
+  --pending: #8a5a00;
+  --danger: #b42318;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--text);
+  background: var(--background);
+}
+
+body { margin: 0; }
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 24px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+header h1 { font-size: 1.2rem; margin: 0; }
+header form { margin-left: auto; }
+
+main { max-width: 1200px; margin: 0 auto; padding: 16px 24px; }
+
+section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+section h2 { font-size: 1.05rem; margin: 0 0 12px; }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; }
+
+button {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font: inherit;
+}
+button:disabled { opacity: 0.5; cursor: default; }
+button.secondary { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+
+a { color: var(--accent); }
+
+.toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.upload, .dispatch { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+.muted { color: var(--muted); font-size: 0.85rem; }
+.error { color: var(--danger); }
+
+.status { font-weight: 600; font-size: 0.8rem; padding: 2px 8px; border-radius: 999px; background: var(--background); }
+.status-SENT { color: var(--pending); }
+.status-RECEIVED { color: var(--success); }
+.status-FAILED { color: var(--danger); }
+
+pre { white-space: pre-wrap; word-break: break-all; max-width: 480px; margin: 4px 0 0; font-size: 0.8rem; }
+
+.login { max-width: 320px; margin: 15vh auto; padding: 0 16px; }
+.login form { display: flex; flex-direction: column; gap: 8px; }
+.login input { padding: 8px; border: 1px solid var(--border); border-radius: 6px; font: inherit; }

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    {{- include "cpin-ines-s3.labels" . | nindent 4 }}
+data:
+  {{- range $cle, $valeur := .Values.env }}
+  {{ $cle }}: {{ $valeur | quote }}
+  {{- end }}

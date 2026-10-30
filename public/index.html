@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>cpin-ines-s3</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <h1>cpin-ines-s3</h1>
+    <span id="lastRefresh" class="muted"></span>
+    <form method="post" action="/logout">
+      <button type="submit" class="secondary">Se déconnecter</button>
+    </form>
+  </header>
+
+  <main>
+    <section>
+      <h2>Stockage de l'Émetteur</h2>
+      <div class="toolbar">
+        <form id="uploadForm" class="upload">
+          <input id="file" name="file" type="file" aria-label="Fichier à déposer" required>
+          <button type="submit">Déposer</button>
+          <span id="uploadMessage" class="muted"></span>
+        </form>
+        <div class="dispatch">
+          <button id="dispatchButton" type="button" title="Demande à INES de rapatrier tous les fichiers du Stockage de l'Émetteur">Envoyer</button>
+          <span id="dispatchMessage" class="muted"></span>
+        </div>
+      </div>
+      <p id="senderError" class="error" hidden></p>
+      <table>
+        <thead><tr><th>Fichier</th><th>Taille</th><th>Modifié le</th><th>Statut d'envoi</th></tr></thead>
+        <tbody id="senderFiles"></tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Stockage du Récepteur</h2>
+      <p id="receiverError" class="error" hidden></p>
+      <table>
+        <thead><tr><th>Fichier</th><th>Taille</th><th>Modifié le</th><th></th></tr></thead>
+        <tbody id="receiverFiles"></tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Envois</h2>
+      <table>
+        <thead><tr><th>Fichier</th><th>Statut</th><th>Envoyé le</th><th>Mis à jour le</th><th>Motif</th><th>Réponse INES</th></tr></thead>
+        <tbody id="dispatches"></tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Notifications reçues</h2>
+      <table>
+        <thead><tr><th>Reçue le</th><th>Chemin</th><th>Envoi</th><th>Résultat</th><th>Corps brut</th></tr></thead>
+        <tbody id="notifications"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
